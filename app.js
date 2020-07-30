@@ -27,13 +27,16 @@ Send me a **private message** to know more about our recruitment (**!info**), an
 //737024926057365504 MG
 bot.on('guildMemberAdd', member => {
     
-    member.send(`Welcome to the Money Guild server ${member.user.username} ! <:MG:425692213733752849>
+    member.send(`Welcome to the Money Guild server ${member.user.username} ! 
 I'm Miya, your application assistance.
-You'll find our rules to the dedicated channel <#568971527127826432>. Please read it !
+You'll find our rules to the dedicated channel  : Please read it !
 Type **!info** to know how we proceed.
-Type **!apply** to start your application`);
+Type **!apply** to start your application
+You'll find our rules here <#568971527127826432>.  Please make sure you've read them thoroughly and agree with everything.
+Type **!info** to better understand our recruitment process.  Once you've read everything proceed to the next step.
+Type !**apply** to begin your application.`);
 });
-
+//<:MG:425692213733752849> EMOTE MG
 let currentApplication = {}
 
 bot.on('message', message => {
@@ -67,6 +70,7 @@ bot.on('message', message => {
                     // message.channel.awaitMessages().then(console.log('YAY'))
 
                     if (message.attachments.size > 0) {
+                        currentApplication[message.author.id].motivation = message.content
                         currentApplication[message.author.id].image = message.attachments.first().url
                         currentApplication[message.author.id].questionDepth += 1 
                         currentApplication[message.author.id].application = { embed: {
@@ -105,6 +109,10 @@ bot.on('message', message => {
                                 name: "Timer",
                                 value: `${currentApplication[message.author.id].timer}`
                             },
+                            {
+                                name: "Motivation",
+                                value: `${currentApplication[message.author.id].motivation}`
+                            },
                             ],
                             timestamp: new Date(),
                             image: {
@@ -125,7 +133,7 @@ bot.on('message', message => {
                 if (currentApplication[message.author.id].english && currentApplication[message.author.id].questionDepth === 6) {
                     currentApplication[message.author.id].timer = message.content
                     currentApplication[message.author.id].questionDepth += 1
-                    if(!message.author.bot) message.author.send(`Explain your motivation to join us & post a screenshot of your login page (I want to see your alt's name!)`)
+                    if(!message.author.bot) message.author.send(`Explain your reasons for wanting to join Money Guild and please upload a screenshot of your login page(no external links)`)
                 }
                 if (currentApplication[message.author.id].expectation && currentApplication[message.author.id].questionDepth === 5) {
                     currentApplication[message.author.id].english = message.content
@@ -169,7 +177,7 @@ bot.on('message', message => {
                 // message.channel.send(exampleEmbed);
                 // console.log(message.author)
 
-                bot.channels.cache.get('737063941791809636').send(`New application from <@${message.author.id}> started`) // 737744651498291308
+                bot.channels.cache.get('737063941791809636').send(`<@${message.author.id}> begins a new application.`) // 737744651498291308
 
                 if(!message.author.bot) {
                     message.author.send(`Let's go ! You can type **!cancel** to cancel your application.
@@ -214,11 +222,13 @@ What's your name in game ?`)
                 if(!message.author.bot) message.author.send(helpeEmbed)
                 break;
             case 'info':
-                if(!message.author.bot) message.author.send(`The recruitment is divided into three phases :
-**1. Post your application**. With my help, we'll build your application, so you don't forget anything!
-**2. Interview-accepted Permission granted**. If you fill our requirement, a recruiter will give you this discord permission. A new channel appears! Write your disponibility to get an interview.
-**3. Pass the interview**. Don't stress ! It's to make sure you know about our rule, and to discuss with you. When the interview is done, you'll get an invite to the guild! Welcome!
-You can apply now with **!apply**.`)
+                if(!message.author.bot) message.author.send(`The recruitment process is dividing into three phases:
+1.  **Post your application**.  With my assistance we'll build your application appropriately and make sure that you don't forget anything.
+2.  If we believe that you're a good candidate to join the guild then you will be granted **the 'Interview Accepted' role** on Discord which will grant permissions to a new channel.  Communicate there with our recruiters to proceed to the next step which will be the vocal interview.
+3.  And the final step will be hopefully **passing the interview**.  This is to make sure that everybody knows about the rules, to have a discussion about the rules and guild in general while also making sure that you're going to be a good fit personality wise.  The better your English the higher your chances of being accepted.
+
+When the interview is done you'll either be invited to the guild or sent back into the wilderness to find a new home.
+`)
                 break;
 
         }
