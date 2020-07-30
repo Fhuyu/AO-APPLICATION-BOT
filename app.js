@@ -20,7 +20,7 @@ const helpeEmbed = new Discord.MessageEmbed()
 
 bot.on('ready', () => {
     console.log('Bot is online!')
-    bot.channels.cache.get('737024926057365504').send(`Hello, I'm Miya, Money Guild application assistance.
+    bot.channels.cache.get('737744651498291308').send(`Hello, I'm Miya, Money Guild application assistance.
 Send me a **private message** to know more about our recruitment (**!info**), and to start your application! (**!apply**)`);
 })
 //737744651498291308 FUYU
@@ -169,7 +169,7 @@ bot.on('message', message => {
                 // message.channel.send(exampleEmbed);
                 console.log(message.author)
 
-                bot.channels.cache.get('737063941791809636').send(`New application from <@${message.author.id}> started`) // 737744651498291308
+                bot.channels.cache.get('737744651498291308').send(`New application from <@${message.author.id}> started`) // 737744651498291308
 
                 if(!message.author.bot) {
                     message.author.send(`Let's go ! You can type **!cancel** to cancel your application.
@@ -181,8 +181,8 @@ What's your name in game ?`)
                 // 737063941791809636 MG
                 if (currentApplication[message.author.id].application) {
                     if(!message.author.bot) message.author.send(`**Your application is posted.** Thank you !`)
-                    bot.channels.cache.get('737063941791809636').send(`<@${message.author.id}> application done.`)
-                    bot.channels.cache.get('737063941791809636').send(currentApplication[message.author.id].application)/* .then(async msg => { 
+                    bot.channels.cache.get('737744651498291308').send(`<@${message.author.id}> application done.`)
+                    bot.channels.cache.get('737744651498291308').send(currentApplication[message.author.id].application)/* .then(async msg => { 
                             // await msg.react('👌')
                             msg.awaitReactions(filter, { 
                                 time: 30000,
