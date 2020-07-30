@@ -20,10 +20,13 @@ const helpeEmbed = new Discord.MessageEmbed()
 
 bot.on('ready', () => {
     console.log('Bot is online!')
+    bot.channels.cache.get('737024926057365504').send(`Hello, I'm Miya, Money Guild application assistance.
+Send me a **private message** to know more about our recruitment (**!info**), and to start your application! (**!apply**)`);
 })
-
+//737744651498291308 FUYU
+//737024926057365504 MG
 bot.on('guildMemberAdd', member => {
-    // member.guild.channels.cache.get('737744651498291308').send("Welcome");
+    
     member.send(`Welcome to the Money Guild server ${member.user.username} ! <:MG:425692213733752849>
 I'm Miya, your application assistance.
 You'll find our rules to the dedicated channel <#568971527127826432>. Please read it !
@@ -174,10 +177,12 @@ What's your name in game ?`)
                 }
                 break;
             case 'confirm':
+                // 737744651498291308 Fuyu
+                // 737063941791809636 MG
                 if (currentApplication[message.author.id].application) {
                     if(!message.author.bot) message.author.send(`**Your application is posted.** Thank you !`)
                     bot.channels.cache.get('737063941791809636').send(`<@${message.author.id}> application done.`)
-                    bot.channels.cache.get('737063941791809636').send(currentApplication[message.author.id].application).then(async msg => { //737063941791809636
+                    bot.channels.cache.get('737063941791809636').send(currentApplication[message.author.id].application)/* .then(async msg => { 
                             // await msg.react('👌')
                             msg.awaitReactions(filter, { 
                                 time: 30000,
@@ -192,7 +197,7 @@ What's your name in game ?`)
                                 message.channel.send('Permission granted!')
                             })
                             .catch(console.error);
-                        })
+                        }) */
                     //  CHOOSE CHANNEL + NO TAG
                 } else {
                     if(!message.author.bot) message.author.send(`You can't confirm your application. It's not full !`)
@@ -213,7 +218,7 @@ What's your name in game ?`)
 **1. Post your application**. With my help, we'll build your application, so you don't forget anything!
 **2. Interview-accepted Permission granted**. If you fill our requirement, a recruiter will give you this discord permission. A new channel appears! Write your disponibility to get an interview.
 **3. Pass the interview**. Don't stress ! It's to make sure you know about our rule, and to discuss with you. When the interview is done, you'll get an invite to the guild! Welcome!
-`)
+You can apply now with **!apply**.`)
                 break;
 
         }
