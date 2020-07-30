@@ -167,7 +167,7 @@ bot.on('message', message => {
             case 'apply':
                 currentApplication[message.author.id] = {applying : true, questionDepth: 0}
                 // message.channel.send(exampleEmbed);
-                console.log(message.author)
+                // console.log(message.author)
 
                 bot.channels.cache.get('737063941791809636').send(`New application from <@${message.author.id}> started`) // 737744651498291308
 
