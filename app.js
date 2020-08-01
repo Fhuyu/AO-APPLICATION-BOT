@@ -21,7 +21,8 @@ const helpeEmbed = new Discord.MessageEmbed()
 bot.on('ready', () => {
     console.log('Bot is online!')
     bot.channels.cache.get('737024926057365504').send(`Hello, I'm Miya, Money Guild application assistance.
-Send me a **private message** to know more about our recruitment (**!info**), and to start your application! (**!apply**)`);
+Send me a **private message** to know more about our recruitment (**!info**), and to start your application! (**!apply**)
+*If you're not looking to apply then ignore this message.*`);
 })
 //737744651498291308 FUYU
 //737024926057365504 MG
@@ -29,12 +30,10 @@ bot.on('guildMemberAdd', member => {
     
     member.send(`Welcome to the Money Guild server ${member.user.username} ! 
 I'm Miya, your application assistance.
-You'll find our rules to the dedicated channel  : Please read it !
-Type **!info** to know how we proceed.
-Type **!apply** to start your application
 You'll find our rules here <#568971527127826432>.  Please make sure you've read them thoroughly and agree with everything.
 Type **!info** to better understand our recruitment process.  Once you've read everything proceed to the next step.
-Type !**apply** to begin your application.`);
+Type !**apply** to begin your application.
+*If you're not looking to apply then ignore this message.*`);
 });
 //<:MG:425692213733752849> EMOTE MG
 let currentApplication = {}
@@ -82,12 +81,16 @@ bot.on('message', message => {
                             // url: "http://google.com",
                             // description: "This is a test embed to showcase what they look like and what they can do.",
                             fields: [{
-                                name: "Name",
+                                name: "IGN",
                                 value: `${currentApplication[message.author.id].name}`
                             },
                             {
                                 name: "Average Playtime",
                                 value: `${currentApplication[message.author.id].playtime}`
+                            },
+                            {
+                                name: "Timer",
+                                value: `${currentApplication[message.author.id].timer}`
                             },
                             {
                                 name: "ZvZ Build",
@@ -106,10 +109,6 @@ bot.on('message', message => {
                                 value: `${currentApplication[message.author.id].english}`
                             },
                             {
-                                name: "Timer",
-                                value: `${currentApplication[message.author.id].timer}`
-                            },
-                            {
                                 name: "Motivation",
                                 value: `${currentApplication[message.author.id].motivation}`
                             },
@@ -125,45 +124,46 @@ bot.on('message', message => {
                             message.author.send(`Type **!confirm** to post your application. You can cancel it by typing **!cancel**`)
                         }
                     } else {
-                        message.author.send(`Sorry, you didn't send a screenshot !
-        Explain your motivation to join us & post a screenshot of your login page (I want to see your alt's name!)`)
+                        message.author.send(`Sorry, you didn't send your motivation with a screenshot !
+**Explain your reasons for wanting to join Money Guild** and please **upload a screenshot of your login page** (no external links)`)
                     }
                     
                 }
-                if (currentApplication[message.author.id].english && currentApplication[message.author.id].questionDepth === 6) {
-                    currentApplication[message.author.id].timer = message.content
+                if (currentApplication[message.author.id].expectation && currentApplication[message.author.id].questionDepth === 6) {
+                    currentApplication[message.author.id].english = message.content
                     currentApplication[message.author.id].questionDepth += 1
                     if(!message.author.bot) message.author.send(`Explain your reasons for wanting to join Money Guild and please upload a screenshot of your login page(no external links)`)
                 }
-                if (currentApplication[message.author.id].expectation && currentApplication[message.author.id].questionDepth === 5) {
-                    currentApplication[message.author.id].english = message.content
-                    currentApplication[message.author.id].questionDepth += 1
-                    if(!message.author.bot) message.author.send(`When do you normally play? (UTC)`)
-                }
-                if (currentApplication[message.author.id].guilds && currentApplication[message.author.id].questionDepth === 4) {
+                
+                if (currentApplication[message.author.id].guilds && currentApplication[message.author.id].questionDepth === 5) {
                     currentApplication[message.author.id].expectation = message.content
                     currentApplication[message.author.id].questionDepth += 1
                     if(!message.author.bot) message.author.send(`Rate your English (Written & Oral) from 1 to 10`)
                 }
-                if (currentApplication[message.author.id].build && currentApplication[message.author.id].questionDepth === 3) {
+                if (currentApplication[message.author.id].build && currentApplication[message.author.id].questionDepth === 4) {
                     currentApplication[message.author.id].guilds = message.content
                     currentApplication[message.author.id].questionDepth += 1
                     if(!message.author.bot) message.author.send(`What are you expecting from us ?`)
                 }
-                if (currentApplication[message.author.id].playtime && currentApplication[message.author.id].questionDepth === 2) {
+                if (currentApplication[message.author.id].timer && currentApplication[message.author.id].questionDepth === 3) {
                     currentApplication[message.author.id].build = message.content
                     currentApplication[message.author.id].questionDepth += 1
                     if(!message.author.bot) message.author.send(`What's your previous guilds ?`)
                 }
+                if (currentApplication[message.author.id].playtime && currentApplication[message.author.id].questionDepth === 2) {
+                    currentApplication[message.author.id].timer = message.content
+                    currentApplication[message.author.id].questionDepth += 1
+                    if(!message.author.bot) message.author.send(`What's your current ZVZ build/spec ?`)
+                }
                 if (currentApplication[message.author.id].name && currentApplication[message.author.id].questionDepth === 1) {
                     currentApplication[message.author.id].playtime = message.content
                     currentApplication[message.author.id].questionDepth += 1
-                    if(!message.author.bot) message.author.send(`What's your current ZVZ build/spec ?`)
+                    if(!message.author.bot) message.author.send(`When do you normally play? (UTC)`)
                 }
                 if (currentApplication[message.author.id].questionDepth === 0) {
                     currentApplication[message.author.id].name = message.content
                     currentApplication[message.author.id].questionDepth += 1
-                    if(!message.author.bot) message.author.send(`What's your average playtime ?`)
+                    if(!message.author.bot) message.author.send(`What's your daily average playtime ?`)
                 }
                 
             }
@@ -189,11 +189,12 @@ What's your name in game ?`)
                 // 737063941791809636 MG
                 if (currentApplication[message.author.id].application) {
                     if(!message.author.bot) message.author.send(`**Your application is posted.** Thank you !`)
+                    // console.log(message.author)
                     bot.channels.cache.get('737063941791809636').send(`<@${message.author.id}> application done.`)
                     bot.channels.cache.get('737063941791809636').send(currentApplication[message.author.id].application)/* .then(async msg => { 
                             // await msg.react('👌')
                             msg.awaitReactions(filter, { 
-                                time: 30000,
+                                time: 600000,
                                 max:1,
                                 errors: ['time']
                             })
@@ -201,6 +202,8 @@ What's your name in game ?`)
                                 console.log(`Collected ${collected.size} reactions`)
                                 const reaction = collected.first()
                                 console.log(reaction)
+                                console.log(reaction.message)
+
                                 // message.author.send(`Permission granted!`)
                                 message.channel.send('Permission granted!')
                             })
@@ -208,13 +211,13 @@ What's your name in game ?`)
                         }) */
                     //  CHOOSE CHANNEL + NO TAG
                 } else {
-                    if(!message.author.bot) message.author.send(`You can't confirm your application. It's not full !`)
+                    if(!message.author.bot) message.author.send(`You can't confirm your application. It's not full!`)
                 }
                 break;
 
             case 'cancel':
                 currentApplication[message.author.id] = undefined
-                message.author.send(`Application canceled. Reapply with **!apply** whenever you want !`)
+                message.author.send(`Application canceled. Reapply with **!apply** whenever you want!`)
                 break;
 
             case 'help':
@@ -223,7 +226,8 @@ What's your name in game ?`)
                 break;
             case 'info':
                 if(!message.author.bot) message.author.send(`The recruitment process is dividing into three phases:
-1.  **Post your application**.  With my assistance we'll build your application appropriately and make sure that you don't forget anything.
+
+1.  **Post your application**.  With my assistance we'll build your application appropriately and make sure that you don't forget anything. (**!apply**)
 2.  If we believe that you're a good candidate to join the guild then you will be granted **the 'Interview Accepted' role** on Discord which will grant permissions to a new channel.  Communicate there with our recruiters to proceed to the next step which will be the vocal interview.
 3.  And the final step will be hopefully **passing the interview**.  This is to make sure that everybody knows about the rules, to have a discussion about the rules and guild in general while also making sure that you're going to be a good fit personality wise.  The better your English the higher your chances of being accepted.
 
@@ -234,7 +238,7 @@ When the interview is done you'll either be invited to the guild or sent back in
         }
         let commands = ['apply', 'cancel', 'confirm', 'help', 'info']
         if (!commands.includes(args[0]) && message.content.charAt(0) === '!') {
-            if(!message.author.bot) message.author.send(`Sorry, I don't know this command. Type **!help** to see my command list !`)
+            if(!message.author.bot) message.author.send(`Sorry, I don't know this command. Type **!help** to see my command list!`)
         }
     }
 })
