@@ -124,8 +124,8 @@ bot.on('message', message => {
                             message.author.send(`Type **!confirm** to post your application. You can cancel it by typing **!cancel**`)
                         }
                     } else {
-                        message.author.send(`Sorry, you didn't send your motivation with a screenshot !
-**Explain your reasons for wanting to join Money Guild** and please **upload a screenshot of your login page** (no external links)`)
+                        message.author.send(`Sorry, you didn't send *your motivation with a screenshot*!
+Explain your reasons for wanting to join Money Guild **and** please upload a screenshot of your login page (**in the same message**) (no external links)`)
                     }
                     
                 }
