@@ -20,7 +20,7 @@ const helpeEmbed = new Discord.MessageEmbed()
 
 bot.on('ready', () => {
     console.log('Bot is online!')
-    bot.channels.cache.get('737024926057365504').send(`Hello, I'm Miya, Money Guild application assistance.
+    bot.channels.cache.get('737744651498291308').send(`Hello, I'm Miya, Money Guild application assistance.
 Send me a **private message** to know more about our recruitment (**!info**), and to start your application! (**!apply**)
 *If you're not looking to apply then ignore this message.*`);
 })
@@ -39,27 +39,13 @@ Type !**apply** to begin your application.
 let currentApplication = {}
 
 bot.on('message', message => {
-    const filter = (reaction, user) => reaction.emoji.name === '👌' && user.id === message.author.id
-    
-    // message.awaitReactions(filter, { time: 15000 })
-    // .then(collected => console.log(`Collected ${collected.size} reactions`))
-    // .catch(console.error);
+    /* const guild = bot.guilds.get("737744651498291303");
+    let role = guild.roles.find(r => r.name === "Recruiter"); //message.
+    console.log(role)
+    let recruiters = message.guild.roles.get(role.id).members.map(m=>m.user.tag);
+    console.log(recruiters)
+    const filter = (reaction) => reaction.emoji.name === '👌' //&& user.id === message.author.id */
 
-    // message.channel.send('hello').then(async msg => {
-    //     // await msg.react('👌')
-    //     msg.awaitReactions(filter, { 
-    //         time: 30000,
-    //         max:1,
-    //         errors: ['time']
-    //     })
-    //     .then(collected => {
-    //         console.log(`Collected ${collected.size} reactions`)
-    //         const reaction = collected.first()
-    //     })
-    //     .catch(console.error);
-    // })
-
-    // console.log(message.channel.type)
     if (message.channel.type === 'dm') {
         if (message.content.charAt(0) !== "!" && !message.author.bot) {
             // APPLICATIONS --------------
@@ -177,7 +163,7 @@ Explain your reasons for wanting to join Money Guild **and** please upload a scr
                 // message.channel.send(exampleEmbed);
                 // console.log(message.author)
 
-                bot.channels.cache.get('737063941791809636').send(`<@${message.author.id}> begins a new application.`) // 737744651498291308
+                bot.channels.cache.get('737744651498291308').send(`<@${message.author.id}> begins a new application.`) // 737744651498291308
 
                 if(!message.author.bot) {
                     message.author.send(`Let's go ! You can type **!cancel** to cancel your application.
@@ -190,25 +176,43 @@ What's your name in game ?`)
                 if (currentApplication[message.author.id].application) {
                     if(!message.author.bot) message.author.send(`**Your application is posted.** Thank you !`)
                     // console.log(message.author)
-                    bot.channels.cache.get('737063941791809636').send(`<@${message.author.id}> application done.`)
-                    bot.channels.cache.get('737063941791809636').send(currentApplication[message.author.id].application)/* .then(async msg => { 
-                            // await msg.react('👌')
-                            msg.awaitReactions(filter, { 
-                                time: 600000,
-                                max:1,
-                                errors: ['time']
-                            })
-                            .then(collected => {
-                                console.log(`Collected ${collected.size} reactions`)
-                                const reaction = collected.first()
-                                console.log(reaction)
-                                console.log(reaction.message)
+                    bot.channels.cache.get('737744651498291308').send(`<@${message.author.id}> application done.`)
+                    // console.log(message.mentions)
+                    bot.channels.cache.get('737744651498291308').send(currentApplication[message.author.id].application).then(async msg => { 
+                            await msg.react('👍');
+                            await msg.react('👎');
+                            setTimeout( () => { 
+                                msg.awaitReactions(r => ['👍', '👎'].includes(r.emoji.name), {max: 1})
+                                .then(collected => {
+                                    // console.log(`Collected ${collected} reactions`)
+                                    // console.log(`Collected ${collected.size} reactions`)
+                                    const reaction = collected.first()
+                                    // console.log('reaction ----------------------', reaction, reaction.users.cache)
+                                    // console.log(Array.from(reaction.users.cache), '++')
 
-                                // message.author.send(`Permission granted!`)
-                                message.channel.send('Permission granted!')
-                            })
-                            .catch(console.error);
-                        }) */
+                                    
+
+                                    if (reaction.emoji.name === '👍') {
+                                        message.author.send(`Your application is accepted. You need to pass our interview to be recruited. Tag our recruiters in xxxxx channel`)
+                                        // member.addRole(member.guild.roles.find("name", "Authorize"))
+                                        // .then(() => { console.log(`Added ${member.user.username} (${member.id}).`); })
+                                        // .catch(console.error);
+                                        let guild = reaction.message.channel.guild
+                                        
+                                        let role = guild.roles.cache.find(r => r.name === "Recruiter");
+
+                                        let member = guild.members.cache.get(message.author.id)
+                                        console.log(member)
+                                        member.roles.add(role)
+                                    } else if (reaction.emoji.name === '👎') {
+                                        let recruiterInteract = Array.from(reaction.users.cache).find( recruiter => !recruiter[1].bot) //You can contact <@${recruiterInteract.id}>
+                                        message.author.send(`Your application was denied. Thank you for your interest in Money Guild! You can contact <@${recruiterInteract[1].id}> for more informations.`)
+                                    }
+                                })
+                                .catch(console.error);
+                            }, 3000);
+                            
+                        })
                     //  CHOOSE CHANNEL + NO TAG
                 } else {
                     if(!message.author.bot) message.author.send(`You can't confirm your application. It's not full!`)
